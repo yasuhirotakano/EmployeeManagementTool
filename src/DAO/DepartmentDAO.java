@@ -11,7 +11,7 @@ import model.Department;
 
 /**
  * DepartmentDAOクラス
- * @author 高野
+ * @author 高野aaa
  * 部署のデータベース操作
  */
 public class DepartmentDAO {

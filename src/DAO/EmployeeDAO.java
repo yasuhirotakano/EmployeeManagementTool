@@ -11,7 +11,7 @@ import model.Employee;
 
 /**
  * EmployeeDAOクラス
- * @author 高野
+ * @author 高野ああああ
  * 社員のデータベース操作
  */
 public class EmployeeDAO {

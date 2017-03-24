@@ -15,8 +15,10 @@ import javax.servlet.http.Part;
 import DAO.DepartmentDAO;
 import DAO.EmployeeDAO;
 import DAO.ImageDAO;
+import DAO.PostDAO;
 import model.Department;
 import model.Employee;
+import model.Post;
 
 /**
  * EEditServleサーブレットクラス
@@ -35,11 +37,13 @@ public class EEditServlet extends HttpServlet {
 		String check = request.getParameter("check");
 		EmployeeDAO empDAO = new EmployeeDAO();
 		DepartmentDAO deparDAO = new DepartmentDAO();
+		PostDAO postDAO = new PostDAO();
+		ArrayList<Post> postList = postDAO.list();
 		ArrayList<Department> deparList = deparDAO.list();
 		
 		if(check.equals("編集")) {
 			boolean judge = false;
-			String empId = request.getParameter("empId");
+			int empId = Integer.parseInt(request.getParameter("empId"));
 			Employee employee = empDAO.select(empId);
 			
 			if(employee.getGender().equals("男")) {
@@ -50,6 +54,7 @@ public class EEditServlet extends HttpServlet {
 			request.setAttribute("employee", employee);
 		}
 		
+		request.setAttribute("postList", postList);
 		request.setAttribute("deparList", deparList);
 		request.setAttribute("check", check);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/EmployeeEdit.jsp");
@@ -61,14 +66,17 @@ public class EEditServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String check = request.getParameter("check");
-		String id = request.getParameter("id");
 		String name = request.getParameter("name");
 		int age = Integer.parseInt(request.getParameter("age"));
+		String birthDay = request.getParameter("birthDay");
 		String gender = request.getParameter("gender");
+		String phoneNumber = request.getParameter("phoneNumber");
 		String postalCode = request.getParameter("postalCode");
 		String prefectures = request.getParameter("prefectures");
 		String address = request.getParameter("address");
 		int departmentId = Integer.parseInt(request.getParameter("departmentId"));
+		int postId = Integer.parseInt(request.getParameter("postId"));
+		String nearestStation = request.getParameter("nearestStation");
 		String enteringDay = request.getParameter("enteringDay");
 		String leavingDay = request.getParameter("leavingDay");
 		Part imageData = request.getPart("imageData");
@@ -79,11 +87,11 @@ public class EEditServlet extends HttpServlet {
 		boolean choice = true;
 		
 		if(check.equals("編集")) {
-			int imageId = Integer.parseInt(request.getParameter("imageId"));
-			error = empDAO.edit(id, name, age, gender, postalCode, prefectures, address, departmentId, enteringDay, leavingDay, imageId);
-			imgDAO.edit(imageId, imageData.getInputStream());
+			int id = Integer.parseInt(request.getParameter("id"));
+			error = empDAO.edit(name, age, birthDay, gender, phoneNumber, postalCode, prefectures, address, departmentId, postId, nearestStation, enteringDay, leavingDay, id);
+			imgDAO.edit(imageData.getInputStream(), id);
 		}else {
-			error = empDAO.create(id, name, age, gender, postalCode, prefectures, address, departmentId, enteringDay, leavingDay);
+			error = empDAO.create(name, age, birthDay, gender, phoneNumber, postalCode, prefectures, address, departmentId, postId, nearestStation, enteringDay, leavingDay);
 			imgDAO.create(imageData.getInputStream());
 		}
 		

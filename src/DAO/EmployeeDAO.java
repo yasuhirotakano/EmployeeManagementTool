@@ -11,7 +11,7 @@ import model.Employee;
 
 /**
  * EmployeeDAOクラス
- * @author 高野ああああ
+ * @author 高野
  * 社員のデータベース操作
  */
 public class EmployeeDAO {
@@ -38,19 +38,22 @@ public class EmployeeDAO {
 			ResultSet rs = pStmt.executeQuery();
 			
 			while(rs.next()) {
-				String id = rs.getString("ID");
+				int id = rs.getInt("ID");
 				String name = rs.getString("NAME");
 				int age = rs.getInt("AGE");
+				String birthDay = rs.getString("BIRTHDAY");
 				String gender = rs.getString("GENDER");
-				int imageId = rs.getInt("IMAGEID");
+				String phoneNumber = rs.getString("PHONENUMBER");
 				String postalCode = rs.getString("POSTALCODE");
 				String prefectures = rs.getString("PREFECTURES");
 				String address = rs.getString("ADDRESS");
 				int departmentId = rs.getInt("DEPARTMENTID");
+				int postId = rs.getInt("POSTID");
+				String nearestStation = rs.getString("NEARESTSTATION");
 				String enteringDay = rs.getString("ENTERINGDAY");
 				String leavingDay = rs.getString("LEAVINGDAY");
-				Employee employee = new Employee(id, name, age, gender, imageId, postalCode, prefectures, address,
-						departmentId, enteringDay, leavingDay);
+				Employee employee = new Employee(id, name, age, birthDay, gender, phoneNumber, postalCode, prefectures, address,
+						departmentId, postId, nearestStation, enteringDay, leavingDay);
 				empList.add(employee);
 			}
 			
@@ -81,7 +84,7 @@ public class EmployeeDAO {
 	 * @param empId 社員情報で登録されてるID
 	 * @return 社員情報が入ってるDepartment型のインスタンス
 	 */
-	public Employee select(String empId) {
+	public Employee select(int empId) {
 		Employee employee = new Employee();
 		Connection conn = null;
 		
@@ -90,23 +93,26 @@ public class EmployeeDAO {
 			conn = DriverManager.getConnection(URL,ID,PW);
 			String sql = "SELECT * FROM EMPLOYEE WHERE ID = ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, empId);
+			pstmt.setInt(1, empId);
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				String id = rs.getString("ID");
+				int id = rs.getInt("ID");
 				String name = rs.getString("NAME");
 				int age = rs.getInt("AGE");
+				String birthDay = rs.getString("BIRTHDAY");
 				String gender = rs.getString("GENDER");
-				int imageId = rs.getInt("IMAGEID");
+				String phoneNumber = rs.getString("PHONENUMBER");
 				String postalCode = rs.getString("POSTALCODE");
 				String prefectures = rs.getString("PREFECTURES");
 				String address = rs.getString("ADDRESS");
 				int departmentId = rs.getInt("DEPARTMENTID");
+				int postId = rs.getInt("POSTID");
+				String nearestStation = rs.getString("NEARESTSTATION");
 				String enteringDay = rs.getString("ENTERINGDAY");
 				String leavingDay = rs.getString("LEAVINGDAY");
-				employee = new Employee(id, name, age, gender, imageId, postalCode, prefectures, address,
-						departmentId, enteringDay, leavingDay);
+				employee = new Employee(id, name, age, birthDay, gender, phoneNumber, postalCode, prefectures, address,
+						departmentId, postId, nearestStation, enteringDay, leavingDay);
 			}
 			
 		}catch(SQLException e) {
@@ -146,7 +152,7 @@ public class EmployeeDAO {
 	 * @param imageId 登録されてる社員情報の部署ID
 	 * @return 登録の成功、失敗 true=成功 false=失敗
 	 */
-	public boolean edit(String id, String name, int age, String gender, String postalCode, String prefectures, String address, int departmentId, String enteringDay, String leavingDay, int imageId) {
+	public boolean edit(String name, int age, String birthDay, String gender, String phoneNumber, String postalCode, String prefectures, String address, int departmentId, int postId, String nearestStation, String enteringDay, String leavingDay, int id) {
 		Connection conn = null;
 		boolean result = false;
 		
@@ -154,19 +160,22 @@ public class EmployeeDAO {
 			Class.forName(NAME);
 			conn = DriverManager.getConnection(URL,ID,PW);
 			conn.setAutoCommit(false);
-			String sql = "UPDATE EMPLOYEE SET ID=?, NAME=?, AGE=?, GENDER=?, POSTALCODE=?, PREFECTURES=?, ADDRESS=?, DEPARTMENTID=?, ENTERINGDAY=?, LEAVINGDAY=? WHERE IMAGEID=?";
+			String sql = "UPDATE EMPLOYEE SET NAME=?, AGE=?, BIRTHDAY=?, GENDER=?, PHONENUMBER=?, POSTALCODE=?, PREFECTURES=?, ADDRESS=?, DEPARTMENTID=?, POSTID=?, NEARESTSTATION=?, ENTERINGDAY=?, LEAVINGDAY=? WHERE ID=?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
-			pStmt.setString(1, id);
-			pStmt.setString(2, name);
-			pStmt.setInt(3, age);
+			pStmt.setString(1, name);
+			pStmt.setInt(2, age);
+			pStmt.setString(3, birthDay);
 			pStmt.setString(4, gender);
-			pStmt.setString(5, postalCode);
-			pStmt.setString(6, prefectures);
-			pStmt.setString(7, address);
-			pStmt.setInt(8, departmentId);
-			pStmt.setString(9, enteringDay);
-			pStmt.setString(10, leavingDay);
-			pStmt.setInt(11, imageId);
+			pStmt.setString(5, phoneNumber);
+			pStmt.setString(6, postalCode);
+			pStmt.setString(7, prefectures);
+			pStmt.setString(8, address);
+			pStmt.setInt(9, departmentId);
+			pStmt.setInt(10, postId);
+			pStmt.setString(11, nearestStation);
+			pStmt.setString(12, enteringDay);
+			pStmt.setString(13, leavingDay);
+			pStmt.setInt(14, id);
 			int item = pStmt.executeUpdate();
 			result = (item > 0);
 			conn.commit();
@@ -215,7 +224,7 @@ public class EmployeeDAO {
 	 * @param leavingDay 入力されてる退社日
 	 * @return 登録の成功、失敗 true=成功 false=失敗
 	 */
-	public boolean create(String id, String name, int age, String gender, String postalCode, String prefectures, String address, int departmentId, String enteringDay, String leavingDay) {
+	public boolean create(String name, int age, String birthDay, String gender, String phoneNumber, String postalCode, String prefectures, String address, int departmentId, int postId, String nearestStation, String enteringDay, String leavingDay) {
 		boolean result = false;
 		Connection conn = null;
 		
@@ -223,18 +232,21 @@ public class EmployeeDAO {
 			Class.forName(NAME);
 			conn = DriverManager.getConnection(URL,ID,PW);
 			conn.setAutoCommit(false);
-			String sql = "INSERT INTO EMPLOYEE(ID, NAME, AGE, GENDER, POSTALCODE, PREFECTURES, ADDRESS, DEPARTMENTID, ENTERINGDAY, LEAVINGDAY) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO EMPLOYEE(NAME, AGE, BIRTHDAY, GENDER, PHONENUMBER, POSTALCODE, PREFECTURES, ADDRESS, DEPARTMENTID, POSTID, NEARESTSTATION, ENTERINGDAY, LEAVINGDAY) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
-			pStmt.setString(1, id);
-			pStmt.setString(2, name);
-			pStmt.setInt(3, age);
+			pStmt.setString(1, name);
+			pStmt.setInt(2, age);
+			pStmt.setString(3, birthDay);
 			pStmt.setString(4, gender);
-			pStmt.setString(5, postalCode);
-			pStmt.setString(6, prefectures);
-			pStmt.setString(7, address);
-			pStmt.setInt(8, departmentId);
-			pStmt.setString(9, enteringDay);
-			pStmt.setString(10, leavingDay);
+			pStmt.setString(5, phoneNumber);
+			pStmt.setString(6, postalCode);
+			pStmt.setString(7, prefectures);
+			pStmt.setString(8, address);
+			pStmt.setInt(9, departmentId);
+			pStmt.setInt(10, postId);
+			pStmt.setString(11, nearestStation);
+			pStmt.setString(12, enteringDay);
+			pStmt.setString(13, leavingDay);
 			int item = pStmt.executeUpdate();
 			result = (item > 0);
 			pStmt.close();
@@ -275,7 +287,7 @@ public class EmployeeDAO {
 	 * @param empId 登録されてる社員ID
 	 * @return 削除の成功、失敗 true=成功 false=失敗
 	 */
-	public boolean delete(String empId) {
+	public boolean delete(int empId) {
 		Connection conn = null;
 		boolean result = false;
 		
@@ -285,7 +297,7 @@ public class EmployeeDAO {
 			conn.setAutoCommit(false);
 			String sql = "DELETE FROM EMPLOYEE WHERE ID=?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, empId);
+			pstmt.setInt(1, empId);
 			int item = pstmt.executeUpdate();
 			result = (item > 0);
 			conn.commit();
@@ -327,7 +339,7 @@ public class EmployeeDAO {
 	 * @param departmentId 選択された部署ID
 	 * @return 検索結果で該当する社員一覧をEmployee型ArrayListに入れてる
 	 */
-	public ArrayList<Employee> Search(String id, String name, int departmentId) {
+	public ArrayList<Employee> Search(int id, String name, int departmentId) {
 		ArrayList<Employee> empList = new ArrayList<Employee>();
 		Connection conn = null;
 		
@@ -341,22 +353,22 @@ public class EmployeeDAO {
 			String sql5 = " NAME LIKE ?";
 			String sql6 = " DEPARTMENTID=?";
 			
-			if(id != "" || name != "" || departmentId != 0) {
+			if(id != 0 || name != "" || departmentId != 0) {
 				sql += sql2;
 			}
 			
-			if(id != "") {
+			if(id != 0) {
 				sql += sql3;
 			}
 			
-			if(id != "" && name != "") {
+			if(id != 0 && name != "") {
 				sql += sql4;
 				sql += sql5;
 			}else if(name != ""){
 				sql += sql5;
 			}
 			
-			if(name != "" && departmentId != 0 || id != "" && departmentId != 0) {
+			if(name != "" && departmentId != 0 || id != 0 && departmentId != 0) {
 				sql += sql4;
 				sql += sql6;
 			}else if(departmentId != 0) {
@@ -364,19 +376,19 @@ public class EmployeeDAO {
 			}
 			
 			PreparedStatement pStmt = conn.prepareStatement(sql);
-			if(id != "") {
-				pStmt.setString(1, id);
+			if(id != 0) {
+				pStmt.setInt(1, id);
 			}
 			
-			if(id != "" && name != "") {
+			if(id != 0 && name != "") {
 				pStmt.setString(2, "%"+name+"%");
 			}else if(name != ""){
 				pStmt.setString(1, "%"+name+"%");
 			}
 			
-			if(id != "" && name != "" && departmentId != 0) {
+			if(id != 0 && name != "" && departmentId != 0) {
 				pStmt.setInt(3, departmentId);
-			}else if(name != "" && departmentId != 0 || id != "" && departmentId != 0) {
+			}else if(name != "" && departmentId != 0 || id != 0 && departmentId != 0) {
 				pStmt.setInt(2, departmentId);
 			}else if(departmentId != 0) {
 				pStmt.setInt(1, departmentId);
@@ -385,9 +397,9 @@ public class EmployeeDAO {
 			ResultSet rs = pStmt.executeQuery();
 			
 			while(rs.next()) {
-				String ids = rs.getString("ID");
+				int intId = rs.getInt("ID");
 				String names = rs.getString("NAME");
-				Employee employee = new Employee(ids, names);
+				Employee employee = new Employee(intId, names);
 				empList.add(employee);
 			}
 			

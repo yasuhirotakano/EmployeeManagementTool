@@ -44,7 +44,6 @@
 					<c:otherwise>
 						<table style="border: solid 1px #000000; border-collapse: separate">
 							<tr  style="background-color: #cccccc">
-								<th>社員ID</th>
 								<th>名前</th>
 							</tr>
 							
@@ -55,21 +54,17 @@
 							
 							<c:forEach var="employee" items="${empList}">
 								<tr>
-									<%-- 社員IDの表示 --%>
-									
-									<td><c:out value="${employee.id}" /></td>
-									
-									<%-- 名前の表示 --%>
+								
+									<%-- 名前の表示 --%>	
 									
 									<td><c:out value="${employee.name}" /></td>
 									
 									<%-- 編集ボタン --%>
 									
 									<td>
-										<form action="/EmployeeManagementTool/EEditServlet" method="GET">
+										<form action="/EmployeeManagementTool/EDisplayServlet" method="GET">
 											<input type="hidden" name="empId" value="${employee.id}">
-											<input type="hidden" name="check" value="編集">
-											<input type="submit" value="編集">
+											<input type="submit" value="詳細">
 										</form>
 									</td>
 									

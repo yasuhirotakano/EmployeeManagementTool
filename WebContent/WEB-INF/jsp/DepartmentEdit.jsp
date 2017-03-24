@@ -18,7 +18,7 @@ department Department型 社員情報１件の情報が入ってる
 		
 			<%-- 部署名入力フォーム --%>
 			
-			<p>部署名:<input type="text" name="departmentName" value="${department.departmentName}"></p>
+			<p>部署名:<input type="text" name="departmentName" value="${department.departmentName}" maxlength="10" required></p>
 			
 			<%--設定ボタン --%>
 			

@@ -35,13 +35,13 @@ public class ImageDAO {
 		try {
 			Class.forName(NAME);
 			conn = DriverManager.getConnection(URL,ID,PW);
-			String sql = "SELECT * FROM IMAGE WHERE IMAGEID = ?";
+			String sql = "SELECT * FROM IMAGE WHERE ID = ?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setInt(1, imgId);
 			ResultSet rs = pStmt.executeQuery();
 			
 			while(rs.next()) {
-				int id = rs.getInt("IMAGEID");
+				int id = rs.getInt("ID");
 				InputStream name = rs.getBinaryStream("IMAGEDATA");
 				ByteArrayOutputStream bout = new ByteArrayOutputStream();
 			    byte [] a = new byte[1024];
@@ -92,7 +92,7 @@ public class ImageDAO {
 	 * @param imageId データベースの画像ID
 	 * @param inputStream 選択した画像データ
 	 */
-	public void edit(int imageId, InputStream inputStream) {
+	public void edit(InputStream inputStream, int id) {
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 		byte[] data = new byte[1024];
 		Connection conn = null;
@@ -121,10 +121,10 @@ public class ImageDAO {
 		try{
 			Class.forName(NAME);
 			conn = DriverManager.getConnection(URL, ID, PW);
-			String sql = "UPDATE IMAGE SET IMAGEDATA=? WHERE IMAGEID=?";
+			String sql = "UPDATE IMAGE SET IMAGEDATA=? WHERE ID=?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setBytes(1, data);
-			pStmt.setInt(2, imageId);
+			pStmt.setInt(2, id);
 			pStmt.executeUpdate();
 			pStmt.close();
 		}catch(SQLException e) {

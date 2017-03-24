@@ -33,7 +33,7 @@ public class ExportFileServlet extends HttpServlet {
 		if(empList != null && empList.size() > 0) {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(baos));
-			String str = "社員ID,名前,年齢,性別,写真ID,郵便番号,都道府県,住所,所属部署ID,入社日,退社日\n";
+			String str = "社員ID,名前,年齢,生年月日,性別,電話番号,郵便番号,都道府県,住所,所属部署ID,役職ID,最寄駅,入社日,退社日\n";
 			bw.write(str);
 			
 			for (Employee employee : empList) {
@@ -44,9 +44,11 @@ public class ExportFileServlet extends HttpServlet {
 				sb.append(",");
 				sb.append(employee.getAge());
 				sb.append(",");
+				sb.append(employee.getBirthDay());
+				sb.append(",");
 				sb.append(employee.getGender());
 				sb.append(",");
-				sb.append(employee.getImageId());
+				sb.append(employee.getPhoneNumber());
 				sb.append(",");
 				sb.append(employee.getPostalCode());
 				sb.append(",");
@@ -55,6 +57,10 @@ public class ExportFileServlet extends HttpServlet {
 				sb.append(employee.getAddress());
 				sb.append(",");
 				sb.append(employee.getDepartmentId());
+				sb.append(",");
+				sb.append(employee.getPostId());
+				sb.append(",");
+				sb.append(employee.getNearestStation());
 				sb.append(",");
 				String day = employee.getEnteringDay();
 				sb.append(day != null ? day : "");

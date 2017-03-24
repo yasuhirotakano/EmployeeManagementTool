@@ -16,18 +16,18 @@ employee Employee型 社員情報１件の情報が入ってる
 	<body>
 		<h1>社員データを${check}します</h1>
 		<form action="/EmployeeManagementTool/EEditServlet" method="POST" enctype="multipart/form-data">
-		
-			<%-- 社員ID入力フォーム --%>
-			
-			<p>社員ID:<input type="text" name="id" value="${employee.id}"></p>
 			
 			<%-- 名前入力フォーム --%>
 			
-			<p>名前:<input type="text" name="name" value="${employee.name}"></p>
+			<p>名前:<input type="text" name="name" value="${employee.name}" maxlength="20" required></p>
 			
 			<%-- 年齢入力フォーム --%>
 			
-			<p>年齢:<input type="text" name="age" value="${employee.age}"></p>
+			<p>年齢:<input type="number" name="age" value="${employee.age}" min="0" max="120" required></p>
+			
+			<%-- 生年月日 --%>
+			
+			<p>生年月日:<input type="text" name="birthDay" value="${employee.birthDay}" maxlength="15" required></p>
 			
 			<%--
 			性別チェックbox
@@ -46,29 +46,33 @@ employee Employee型 社員情報１件の情報が入ってる
 						<input type="radio" name="gender" value="女" checked="checked">女性
 					</c:when>
 					<c:otherwise>
-						<input type="radio" name="gender" value="男">男性
-						<input type="radio" name="gender" value="女">女性
+						<input type="radio" name="gender" value="男" required>男性
+						<input type="radio" name="gender" value="女" required>女性
 					</c:otherwise>
 				</c:choose>
 			</p>
 			
+			<%-- 電話番号入力フォーム --%>
+			
+			<p>電話番号:<input type="text" name="phoneNumber" value="${employee.phoneNumber}" maxlength="15"required></p>
+			
 			<%-- 写真表示 --%>
 			
 			<p>写真</p>
-			<c:if test="${employee.imageId != null}">
-				<img style="width: 100px; height: 100px" src="/EmployeeManagementTool/GetImage?id=${employee.imageId}"><br/>
+			<c:if test="${employee.id != null}">
+				<img style="width: 100px; height: 100px" src="/EmployeeManagementTool/GetImage?id=${employee.id}"><br/>
 			</c:if>
 			
 			<%-- 写真登録フォーム --%>
 			
 			<p>
 				<input type="file" name="imageData">
-				<input type="hidden" name="imageId" value="${employee.imageId}">
+				<input type="hidden" name="imageId" value="${employee.id}">
 			</p>
 			
 			<%-- 郵便番号入力フォーム --%>
 			
-			<p>郵便番号:<input type="text" name="postalCode" value="${employee.postalCode}"></p>
+			<p>郵便番号:<input type="text" name="postalCode" value="${employee.postalCode}" maxlength="8" required></p>
 			
 			<%-- 都道府県プルダウンメニュー --%>
 			
@@ -127,7 +131,7 @@ employee Employee型 社員情報１件の情報が入ってる
 			
 			<%-- 住所入力フォーム --%>
 			
-			<p>住所:<input type="text" name="address" value="${employee.address}"></p>
+			<p>住所:<input type="text" name="address" value="${employee.address}" maxlength="30" required></p>
 			
 			<%-- 部署一覧プルダウンメニュー --%>
 			
@@ -140,17 +144,33 @@ employee Employee型 社員情報１件の情報が入ってる
 				</select>
 			</p>
 			
+			<%-- 役職一覧プルダウンメニュー --%>
+			
+			<p>
+				役職:
+				<select name="postId">
+					<c:forEach var="post" items="${postList}">
+						<option value="${post.postId}" ${post.postId == employee.postId ? "Selected" : ""}>${post.postName}</option>
+					</c:forEach>
+				</select>
+			</p>
+			
+			<%-- 最寄駅入力フォーム --%>
+			
+			<p>最寄駅:<input type="text" name="nearestStation" value="${employee.nearestStation}" maxlength="10" required></p>
+			
 			<%-- 入社日入力フォーム --%>
 			
-			<p>入社日:<input type="text" name="enteringDay" value="${employee.enteringDay}"></p>
+			<p>入社日:<input type="text" name="enteringDay" value="${employee.enteringDay}" maxlength="15"></p>
 			
 			<%-- 退社日入力フォーム --%>
 			
-			<p>退社日:<input type="text" name="leavingDay" value="${employee.leavingDay}"></p>
+			<p>退社日:<input type="text" name="leavingDay" value="${employee.leavingDay}" maxlength="15"></p>
 			
 			<%-- 設定ボタン --%>
 			
 			<input type="hidden" name="check" value="${check}">
+			<input type="hidden" name="id" value="${employee.id}">
 			<input type="submit" value="設定">
 			
 		</form>

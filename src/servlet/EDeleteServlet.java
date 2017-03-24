@@ -24,7 +24,7 @@ public class EDeleteServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		String empId = request.getParameter("empId");
+		int empId = Integer.parseInt(request.getParameter("empId"));
 		EmployeeDAO empDAO = new EmployeeDAO();
 		boolean error = empDAO.delete(empId);
 		if(error) {

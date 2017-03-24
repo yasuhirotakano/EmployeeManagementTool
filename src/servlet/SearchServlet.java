@@ -42,7 +42,15 @@ public class SearchServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		int departmentId = Integer.parseInt(request.getParameter("departmentId"));
 		EmployeeDAO empDAO = new EmployeeDAO();
-		ArrayList<Employee> empList = empDAO.Search(id, name, departmentId);
+		int intId;
+		
+		if(id.equals("")) {
+			intId = 0;
+		}else {
+			intId = Integer.parseInt(id);
+		}
+		
+		ArrayList<Employee> empList = empDAO.Search(intId, name, departmentId);
 		
 		if(empList == null || empList.size() == 0) {
 			boolean lCheck = true;

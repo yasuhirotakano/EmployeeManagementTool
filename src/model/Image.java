@@ -11,24 +11,25 @@ public class Image implements Serializable{
 	
 	/** image beansクラスのフィールド */
 	/** 画像ID */
-	private int imageId;
+	private int id;
 	/** 画像データ */
 	private byte[] imageData;
 	
 	/** getter/setterの定義 */
-	public int getImageId() {
-		return this.imageId;
+	public int getId() {
+		return this.id;
 	}
-	public void setImageId(int imageId) {
-		this.imageId = imageId;
+	public void setId(int id) {
+		this.id = id;
 	}
 	public byte[] getImageData() {
 		return this.imageData;
 	}
+	/** image beansクラスのコンストラクタ */
 	public void setImageData(byte[] imageData) {
 		this.imageData = imageData;
 	}
-	
+
 	/** image beansクラスのコンストラクタ */
 	public Image() {
 	}
@@ -38,8 +39,8 @@ public class Image implements Serializable{
 	 * @param imageId データベースに登録されてる画像ID
 	 * @param imageData データベースに登録されてる画像のバイトデータ
 	 */
-	public Image(int imageId, byte[] imageData) {
-		this.imageId = imageId;
+	public Image(int id, byte[] imageData) {
+		this.id = id;
 		this.imageData = imageData;
 	}
 }

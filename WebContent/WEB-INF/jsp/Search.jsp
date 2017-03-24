@@ -29,11 +29,11 @@
 			
 			<%-- 社員ID検索フォーム --%>
 			
-			<p>社員ID:<input type="text" name="id"></p>
+			<p>社員ID:<input type="number" name="id" maxlength="7"></p>
 			
 			<%-- 名前検索フォーム --%>
 			
-			<p>名前に含む文字:<input type="text" name="name"></p>
+			<p>名前に含む文字:<input type="text" name="name" maxlength="20"></p>
 			
 			<%-- 検索ボタン --%>
 			

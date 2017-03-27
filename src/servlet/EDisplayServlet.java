@@ -29,6 +29,8 @@ public class EDisplayServlet extends HttpServlet {
 		Employee employee = empDAO.select(empId);
 		Department department = deparDAO.select(employee.getId());
 		Post post = postDAO.select(employee.getId());
+		String result = String.format("%07d", employee.getId());
+		request.setAttribute("result", result);
 		request.setAttribute("post", post);
 		request.setAttribute("department", department);
 		request.setAttribute("employee", employee);

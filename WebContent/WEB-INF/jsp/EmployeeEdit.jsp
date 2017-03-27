@@ -150,7 +150,7 @@ employee Employee型 社員情報１件の情報が入ってる
 				役職:
 				<select name="postId">
 					<c:forEach var="post" items="${postList}">
-						<option value="${post.postId}" ${post.postId == employee.postId ? "Selected" : ""}>${post.postName}</option>
+						<option value="${post.id}" ${post.id == employee.postId ? "Selected" : ""}>${post.postName}</option>
 					</c:forEach>
 				</select>
 			</p>

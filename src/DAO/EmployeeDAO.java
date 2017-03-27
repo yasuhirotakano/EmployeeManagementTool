@@ -424,4 +424,44 @@ public class EmployeeDAO {
 		return empList;
 		
 	}
+	
+	public boolean selectC(int empId) {
+		boolean check;
+		Connection conn = null;
+		
+		try {
+			Class.forName(NAME);
+			conn = DriverManager.getConnection(URL,ID,PW);
+			String sql = "SELECT * FROM EMPLOYEE WHERE ID = ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, empId);
+			ResultSet rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				check = true;
+			}else {
+				check = false;
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}catch(ClassNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}finally {
+			if(conn != null) {
+				
+				try {
+					conn.close();
+				}catch(SQLException e) {
+					e.printStackTrace();
+					return false;
+				}
+				
+			}
+		}
+		return check;
+		
+	}
 }

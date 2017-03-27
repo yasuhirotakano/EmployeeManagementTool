@@ -8,6 +8,16 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>社員データベース管理ページ</title>
+		<script type="text/javascript">
+			function disp(){
+				if(window.confirm('本当に削除しますか？')){
+					return true;
+				}else{
+					window.alert('キャンセルされました');
+					return false;
+				}
+			}
+		</script>
 	</head>
 	<body>
 		<c:choose>
@@ -60,22 +70,25 @@
 									<td><c:out value="${employee.name}" /></td>
 									
 									<%-- 編集ボタン --%>
-									
-									<td>
-										<form action="/EmployeeManagementTool/EDisplayServlet" method="GET">
-											<input type="hidden" name="empId" value="${employee.id}">
-											<input type="submit" value="詳細">
-										</form>
-									</td>
+									<c:if test="${user.postId != 5}">
+										<td>
+											<form action="/EmployeeManagementTool/EDisplayServlet" method="GET">
+												<input type="hidden" name="empId" value="${employee.id}">
+												<input type="submit" value="詳細">
+											</form>
+										</td>
+									</c:if>
 									
 									<%-- 削除ボタン --%>
 									
-									<td>
-										<form action="/EmployeeManagementTool/EDeleteServlet" method="GET">
-											<input type="hidden" name="empId" value="${employee.id}">
-											<input type="submit" value="削除">
-										</form>
-									</td>
+									<c:if test="${user.postId == 4}">
+										<td>
+											<form action="/EmployeeManagementTool/EDeleteServlet" method="GET">
+												<input type="hidden" name="empId" value="${employee.id}">
+												<input type="submit" value="削除" onClick="return disp();">
+											</form>
+										</td>
+									</c:if>
 									
 								</tr>
 							</c:forEach>
@@ -86,10 +99,12 @@
 				
 				<%-- 新規追加ボタン --%>
 				
-				<form action="/EmployeeManagementTool/EEditServlet" method="GET">
-					<input type="hidden" name="check" value="新規追加">
-					<input type="submit" value="新規追加">
-				</form>
+				<c:if test="${user.postId == 4 || user.postId == 1}">
+					<form action="/EmployeeManagementTool/EEditServlet" method="GET">
+						<input type="hidden" name="check" value="新規追加">
+						<input type="submit" value="新規追加">
+					</form>
+				</c:if>
 				
 				<%-- 検索ボタン --%>
 				
@@ -99,9 +114,11 @@
 				
 				<%-- ファイル出力ボタン --%>
 				
-				<form action="/EmployeeManagementTool/ExportFileServlet" method="GET">
-					<input type="submit" value="CSVファイルに出力">
-				</form>
+				<c:if test="${user.postId == 4}">
+					<form action="/EmployeeManagementTool/ExportFileServlet" method="GET">
+						<input type="submit" value="CSVファイルに出力">
+					</form>
+				</c:if>
 				
 				<%-- トップページへボタン --%>
 				

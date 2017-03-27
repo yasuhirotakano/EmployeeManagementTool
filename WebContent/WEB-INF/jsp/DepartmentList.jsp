@@ -52,22 +52,24 @@
 							
 							<%-- 編集ボタン --%>
 							
-							<td>
-								<form action="/EmployeeManagementTool/DEditServlet" method="GET">
-									<input type="hidden" name="deparId" value="${department.departmentId}">
-									<input type="hidden" name="check" value="編集">
-									<input type="submit" value="編集">
-								</form>
-							</td>
-							
-							<%-- 削除ボタン --%>
-							
-							<td>
-								<form action="/EmployeeManagementTool/DDeleteServlet" method="GET">
-									<input type="hidden" name="deparId" value="${department.departmentId}">
-									<input type="submit" value="削除">
-								</form>
-							</td>
+							<c:if test="${user.postId == 4}">
+								<td>
+									<form action="/EmployeeManagementTool/DEditServlet" method="GET">
+										<input type="hidden" name="deparId" value="${department.departmentId}">
+										<input type="hidden" name="check" value="編集">
+										<input type="submit" value="編集">
+									</form>
+								</td>
+								
+								<%-- 削除ボタン --%>
+								
+								<td>
+									<form action="/EmployeeManagementTool/DDeleteServlet" method="GET">
+										<input type="hidden" name="deparId" value="${department.departmentId}">
+										<input type="submit" value="削除">
+									</form>
+								</td>
+							</c:if>
 							
 						</tr>
 					</c:forEach>
@@ -76,10 +78,12 @@
 				
 				<%-- 新規追加ボタン --%>
 				
-				<form action="/EmployeeManagementTool/DEditServlet" method="GET">
-					<input type="hidden" name="check" value="新規追加">
-					<input type="submit" value="新規追加">
-				</form>
+				<c:if test="${user.postId == 4}">
+					<form action="/EmployeeManagementTool/DEditServlet" method="GET">
+						<input type="hidden" name="check" value="新規追加">
+						<input type="submit" value="新規追加">
+					</form>
+				</c:if>
 				
 				<%-- トップページへボタン --%>
 				

@@ -94,6 +94,8 @@ public class ExportFileServlet extends HttpServlet {
 		String name = getFileName(part);
 		ServletContext context = this.getServletContext();
 		String filePath = context.getRealPath("/uploaded" + "/" + name);
+		//filePath = filePath.replaceAll("\\", "/");
+		System.out.println(filePath);
 		part.write(filePath);
 		EmployeeDAO empDAO = new EmployeeDAO();
 		boolean check = empDAO.input(filePath);

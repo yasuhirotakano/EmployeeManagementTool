@@ -112,6 +112,15 @@
 					<input type="submit" value="検索...">
 				</form>
 				
+				<%-- ファイル読み込みボタン --%>
+				
+				<c:if test="${user.postId == 4}">
+					<form action="/EmployeeManagementTool/ExportFileServlet" method="POST" enctype="multipart/form-data">
+						<input type="file" name="file">
+						<input type="submit" value="CSVファイルの読み込み">
+					</form>
+				</c:if>
+				
 				<%-- ファイル出力ボタン --%>
 				
 				<c:if test="${user.postId == 4}">
@@ -119,6 +128,7 @@
 						<input type="submit" value="CSVファイルに出力">
 					</form>
 				</c:if>
+				
 				
 				<%-- トップページへボタン --%>
 				

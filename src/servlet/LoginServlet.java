@@ -27,13 +27,13 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		int empId = Integer.parseInt(request.getParameter("id"));
+		EmployeeDAO empDAO = new EmployeeDAO();
 		UserDAO userDAO = new UserDAO();
-		boolean check = userDAO.selectC(empId);
+		boolean check = empDAO.selectC(empId);
 		if(check) {
 			String pass = request.getParameter("pass");
 			User u = userDAO.select(empId);
 			if(pass.equals(u.getPass())) {
-				EmployeeDAO empDAO = new EmployeeDAO();
 				Employee user = empDAO.select(u.getId());
 				HttpSession session = request.getSession();
 				session.setAttribute("user", user);

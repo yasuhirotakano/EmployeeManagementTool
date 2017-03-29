@@ -425,6 +425,11 @@ public class EmployeeDAO {
 		
 	}
 	
+	/**
+	 * 判定メソッド
+	 * @param empId
+	 * @return true=ある false=ない
+	 */
 	public boolean selectC(int empId) {
 		boolean check;
 		Connection conn = null;
@@ -462,6 +467,52 @@ public class EmployeeDAO {
 			}
 		}
 		return check;
+		
+	}
+	
+	public boolean input(String filePath) {
+		boolean result = false;
+		Connection conn = null;
+		
+		try {
+			Class.forName(NAME);
+			conn = DriverManager.getConnection(URL,ID,PW);
+			conn.setAutoCommit(false);
+			String sql = "LOAD DATA LOCAL INFILE ? REPLACE INTO TABLE employee FIELDS TERMINATED BY ',' ENCLOSED BY '\"' ESCAPED BY '\\' LINES TERMINATED BY '\r\n' IGNORE 1 LINES";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, filePath);
+			int item = pStmt.executeUpdate();
+			result = (item > 0);
+			pStmt.close();
+			conn.commit();
+			
+		}catch(SQLException e) {
+			
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+				return result;
+			}
+			
+			e.printStackTrace();
+			return result;
+		}catch(ClassNotFoundException e) {
+			e.printStackTrace();
+			return result;
+		}finally {
+			if(conn != null) {
+				
+				try {
+					conn.close();
+				}catch(SQLException e) {
+					e.printStackTrace();
+					return result;
+				}
+				
+			}
+		}
+		return result;
 		
 	}
 }

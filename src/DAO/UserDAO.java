@@ -8,8 +8,14 @@ import java.sql.SQLException;
 
 import model.User;
 
+/**
+ * UserDAOクラス
+ * @author 高野
+ * ユーザーのデータベース操作
+ */
 public class UserDAO {
 	
+	/** UserDAOクラスのフィールド 定数 */
 	public static final String NAME = "com.mysql.jdbc.Driver";
 	public static final String URL = "jdbc:mysql://localhost/employeedb";
 	public static final String ID = "root";
@@ -140,5 +146,41 @@ public class UserDAO {
 		}
 		return check;
 		
+	}
+	
+	public void delete() {
+		Connection conn = null;
+		
+		try {
+			Class.forName(NAME);
+			conn = DriverManager.getConnection(URL,ID,PW);
+			conn.setAutoCommit(false);
+			String sql = "DELETE FROM USER";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.executeUpdate();
+			conn.commit();
+			pstmt.close();
+		}catch(SQLException e) {
+			
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			
+			e.printStackTrace();
+		}catch(ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally {
+			if(conn != null) {
+				
+				try {
+					conn.close();
+				}catch(SQLException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}
 	}
 }

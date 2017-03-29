@@ -9,13 +9,23 @@ import java.util.ArrayList;
 
 import model.Post;
 
+/**
+ * PostDAO
+ * @author 高野
+ *　役職のデータベース操作
+ */
 public class PostDAO {
 	
+	/** PostDAOクラスのフィールド 定数 */
 	public static final String NAME = "com.mysql.jdbc.Driver";
 	public static final String URL = "jdbc:mysql://localhost/employeedb";
 	public static final String ID = "root";
 	public static final String PW = "i-standard";
 	
+	/**
+	 * 役職一覧取得メソッド
+	 * @return 役職一覧が入ってるPost型ArrayList
+	 */
 	public ArrayList<Post> list() {
 		ArrayList<Post> postList = new ArrayList<Post>();
 		Connection conn = null;
@@ -56,6 +66,11 @@ public class PostDAO {
 		
 	}
 	
+	/**
+	 * 役職取得メソッド
+	 * @param empId 入力されたPOSTID
+	 * @return 役職情報
+	 */
 	public Post select(int empId) {
 		Post post = new Post();
 		Connection conn = null;

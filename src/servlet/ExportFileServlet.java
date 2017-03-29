@@ -6,14 +6,20 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import DAO.EmployeeDAO;
+import DAO.UserDAO;
 import model.Employee;
 
 /**
@@ -22,6 +28,7 @@ import model.Employee;
  * CSVファイル保存用
  */
 @WebServlet("/ExportFileServlet")
+@MultipartConfig()
 public class ExportFileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -81,4 +88,41 @@ public class ExportFileServlet extends HttpServlet {
 			os.close();
 		}
 	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Part part = request.getPart("file");
+		String name = getFileName(part);
+		ServletContext context = this.getServletContext();
+		String filePath = context.getRealPath("/uploaded" + "/" + name);
+		part.write(filePath);
+		EmployeeDAO empDAO = new EmployeeDAO();
+		boolean check = empDAO.input(filePath);
+		String result = "失敗";
+		boolean error = true;
+		if(check) {
+			UserDAO userDAO = new UserDAO();
+			userDAO.delete();
+			HttpSession session = request.getSession();
+			session.removeAttribute("user");
+			result = "成功";
+			error = false;
+		}
+		request.setAttribute("result", result);
+		request.setAttribute("error", error);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/Input.jsp");
+		dispatcher.forward(request, response);
+	}
+	
+	private String getFileName(Part part) {
+        String name = null;
+        for (String dispotion : part.getHeader("Content-Disposition").split(";")) {
+            if (dispotion.trim().startsWith("filename")) {
+                name = dispotion.substring(dispotion.indexOf("=") + 1).replace("\"", "").trim();
+                name = name.substring(name.lastIndexOf("\\") + 1);
+                break;
+            }
+        }
+        return name;
+        
+    }
 }

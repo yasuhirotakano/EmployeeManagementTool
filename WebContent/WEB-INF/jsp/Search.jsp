@@ -19,6 +19,7 @@
 			--%>
 			
 			<p>
+				所属部署:
 				<select name="departmentId">
 					<option value="0" Selected>未指定</option>
 					<c:forEach var="department" items="${deparList}">
